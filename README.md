@@ -31,20 +31,19 @@ and [Pycord](https://github.com/Pycord-Development/pycord) with some utility fun
 ## Installing
 Python 3.9 or higher is required.
 ```
-pip install ezcord
+pip install novacordpy
 ```
 You can also install the latest version from GitHub. Note that this version may be unstable
 and requires [git](https://git-scm.com/downloads) to be installed.
 ```
-pip install git+https://github.com/tibue99/ezcord
+pip install git+https://github.com/NovaCord-at/NovaCord-py
 ```
 If you need the latest version in your `requirements.txt` file, you can add this line:
 ```
-ezcord @ git+https://github.com/tibue99/ezcord
+ezcord @ git+https://github.com/NovaCord-at/NovaCord-py
 ```
 
 ## Useful Links
-- [Documentation](https://ezcord.readthedocs.io/) | [Getting started](https://ezcord.readthedocs.io/en/latest/pages/getting_started.html)
 - [Pycord](https://docs.pycord.dev/) | [Discord.py](https://discordpy.readthedocs.io/en/stable/)
 - [PyPi](https://pypi.org/project/ezcord/)
 
