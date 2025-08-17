@@ -1,30 +1,23 @@
 # Configuration file for the Sphinx documentation builder.
 
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
-
-# Project information
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
 import os
 import sys
 from datetime import date
 
+# Stelle sicher, dass Sphinx dein Paket findet
 sys.path.insert(0, os.path.abspath("../"))
 
+# Importiere die Version aus deinem Paket
 from novacordpy import __version__
 
+# -- Projekt-Informationen -----------------------------------------------------
 project = "novacordpy"
 copyright = f"{date.today().year}, atpascal07"
 author = "atpascal07"
 release = __version__
-
 version = __version__
 
-
-# General configuration
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
-
+# -- Allgemeine Konfiguration --------------------------------------------------
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.todo",
@@ -37,9 +30,9 @@ extensions = [
 ]
 
 simplify_optional_unions = True
-
 autodoc_member_order = "bysource"
 
+# Verknüpfungen zu anderen Projektdokumentationen
 intersphinx_mapping = {
     "py": ("https://docs.python.org/3", None),
     "aio": ("https://docs.aiohttp.org/en/stable/", None),
@@ -52,11 +45,7 @@ intersphinx_mapping = {
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-
-# Options for HTML output and furo customisation
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-# https://pradyunsg.me/furo/customisation/
-
+# -- HTML-Ausgabe --------------------------------------------------------------
 html_theme = "furo"
 html_static_path = ["_static"]
 
