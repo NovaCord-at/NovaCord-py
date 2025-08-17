@@ -1,12 +1,12 @@
 [project]
-name = "ezcord"
+name = "novacordpy"
 description = "An easy-to-use extension for Discord.py and Pycord"
 readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
 keywords = ["discord", "pycord", "py-cord", "discord.py"]
 authors = [
-    { name = "tibue99" }
+    { name = "atpascal07" }
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -37,8 +37,7 @@ markers = [
 ]
 
 [project.urls]
-GitHub = "https://github.com/tibue99/ezcord"
-Documentation = "https://ezcord.readthedocs.io"
+GitHub = "https://github.com/NovaCord-at/NovaCord-py"
 
 [build-system]
 requires = ["setuptools>=62.6", "wheel"]
