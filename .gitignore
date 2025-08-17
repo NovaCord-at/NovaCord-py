@@ -1,7 +1,16 @@
+example_bot/
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.egg-info/
-dist/
+.idea/
+venv
+.env
+*.db
+*.log
+
+# Packaging
 build/
+dist/
+*.egg-info/
+*.egg
+
+# Sphinx
+docs/_build
