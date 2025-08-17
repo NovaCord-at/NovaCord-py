@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Any, Callable
 
 import aiohttp
 from dotenv import load_dotenv
+from colorama import Fore
 
 from .emb import EzContext
 from .emb import error as error_emb
