@@ -14,9 +14,9 @@ sys.path.insert(0, os.path.abspath("../"))
 
 from ezcord import __version__
 
-project = "Ezcord"
-copyright = f"{date.today().year}, tibue99"
-author = "tibue99"
+project = "novacordpy"
+copyright = f"{date.today().year}, atpascal07"
+author = "atpascal07"
 release = __version__
 
 version = __version__
