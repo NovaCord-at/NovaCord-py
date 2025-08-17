@@ -40,7 +40,7 @@ pip install git+https://github.com/NovaCord-at/NovaCord-py
 ```
 If you need the latest version in your `requirements.txt` file, you can add this line:
 ```
-ezcord @ git+https://github.com/NovaCord-at/NovaCord-py
+novacord @ git+https://github.com/NovaCord-at/NovaCord-py
 ```
 
 ## Useful Links
