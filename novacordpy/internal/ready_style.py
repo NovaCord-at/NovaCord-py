@@ -36,7 +36,7 @@ class Bold(Style):
     TL, TR, BL, BR, H, V, M, L, R, T, B = "╔", "╗", "╚", "╝", "═", "║", "╬", "╠", "╣", "╦", "╩"
 
 
-READY_TITLE: str = f"Bot is online with EzCord {__version__}"
+READY_TITLE: str = f"Bot is online with NovaCordPy {__version__}"
 DEFAULT_COLORS: list[str] = [Fore.CYAN, Fore.MAGENTA, Fore.YELLOW, Fore.GREEN, Fore.BLUE, Fore.RED]
 
 
