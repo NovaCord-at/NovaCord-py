@@ -1,5 +1,5 @@
 __title__ = "NovaCordpy"
-__author__ = "NovaCord-at"
+__author__ = "atpascal07"
 __license__ = "MIT"
 __version__ = "0.1.0"
 
