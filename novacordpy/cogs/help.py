@@ -15,44 +15,38 @@ from ..logs import log
 
 
 def get_emoji(cog: Cog) -> str:
+    """Wählt ein Emoji für einen Cog aus (entweder festgelegt oder zufällig)."""
     if hasattr(cog, "emoji") and cog.emoji:
-        emoji = cog.emoji
-    else:
-        emoji = random.choice(["🔰", "👻", "🍪", "👥", "🦕", "🐧", "✨", "😩", "🍔"])
-
-    return emoji
+        return cog.emoji
+    return random.choice(["🔰", "👻", "🍪", "👥", "🦕", "🐧", "✨", "🍔", "⚡", "🛠️"])
 
 
 def get_group(cog: Cog, cog_name: str, locale: str) -> tuple[str | None, str]:
-    group = None
-    if hasattr(cog, "group") and cog.group:
-        group = cog.group
-
+    """Liefert die Gruppe und lokalisierten Namen eines Cogs zurück."""
+    group = getattr(cog, "group", None)
     name = group if group else cog_name
-
     localized_name = None
+
     if hasattr(cog, "name_localizations"):
         localized_name = cog.name_localizations.get(locale, cog_name)
 
     try:
-        # if the command has a group, the localized name will be loaded from the group cog instead
         localized_name = I18N.cmd_localizations[locale]["cogs"][name]["name"]
     except (KeyError, AttributeError):
         pass
 
-    name = localized_name or name
-    return group, name
+    return group, localized_name or name
 
 
 def replace_placeholders(s: str, **kwargs: str):
     for key, value in kwargs.items():
-        if not value:
-            continue
-        s = s.replace(f"{{{key}}}", value)
+        if value:
+            s = s.replace(f"{{{key}}}", value)
     return s
 
 
 def get_cmd_desc(command, locale: str):
+    """Liefert die lokalisierte Beschreibung eines Befehls zurück."""
     if command.description_localizations is not discord.MISSING:
         return command.description_localizations.get(locale, command.description)
     return command.description
@@ -61,47 +55,38 @@ def get_cmd_desc(command, locale: str):
 def get_cog_desc(cog, locale: str) -> str | None:
     if hasattr(cog, "description_localizations"):
         return cog.description_localizations.get(locale, cog.description)
-    return None
+    return getattr(cog, "description", None)
 
 
 def get_perm_parent(cmd: discord.SlashCommand) -> discord.SlashCommandGroup | None:
-    """Iterates through parent groups until it finds a group with default_member_permissions set."""
+    """Findet die erste Parent-Gruppe mit Permissions."""
     if PYCORD:
-        while cmd.default_member_permissions is None:
+        while cmd and cmd.default_member_permissions is None:
             cmd = cmd.parent
-            if cmd is None:
-                return None
-
-        return cmd.default_member_permissions
-
+        return cmd.default_member_permissions if cmd else None
     else:
-        while cmd.default_permissions is None:
+        while cmd and cmd.default_permissions is None:
             cmd = cmd.parent
-            if cmd is None:
-                return None
-
-        return cmd.default_permissions
+        return cmd.default_permissions if cmd else None
 
 
 async def pass_checks(command: discord.SlashCommand, ctx) -> bool:
-    """Returns True if the current user passes all checks (Pycord only)."""
-    passed = True
+    """Prüft alle Checks für einen Command."""
     for check in deepcopy(command.checks):
         try:
             if inspect.iscoroutinefunction(check):
                 await check(ctx)
             else:
                 if not check(ctx):
-                    passed = False
-                    break
+                    return False
         except Exception:
-            passed = False
-            break
-
-    return passed
+            return False
+    return True
 
 
 class Help(Cog, hidden=True):
+    """Das Haupt-Help-Menü für NovaCord."""
+
     def __init__(self, bot: Bot):
         super().__init__(bot)
         if PYCORD:
@@ -115,19 +100,23 @@ class Help(Cog, hidden=True):
     @slash_command(name=tr("cmd_name"), description=tr("cmd_description"))
     async def help(self, ctx):
         interaction = ctx.interaction if PYCORD else ctx
+
+        # Standard-Embed, wenn nichts gesetzt ist
         embed = self.bot.help.embed
         if embed is None:
             embed = discord.Embed(
-                title=tr("embed_title", use_locale=ctx.interaction), color=discord.Color.blue()
+                title="📘 NovaCord Hilfe",
+                description="Wähle unten eine Kategorie aus, um Befehle anzuzeigen.",
+                color=discord.Color.blue()
             )
+            embed.set_footer(text="NovaCord Help Menu")
+            embed.set_author(name=str(ctx.user), icon_url=getattr(ctx.user.avatar, "url", None))
 
-        # check language file for embed localization
+        # Übersetzungen laden
         locale = I18N.get_locale(ctx)
         try:
             embed_overrides = I18N.localizations[locale]["help"]["embed"]
         except (KeyError, AttributeError):
-            # KeyError: language file for this locale does not have a help/embed section
-            # AttributeError: I18N class is not in use
             embed_overrides = {}
 
         for key, value in embed_overrides.items():
@@ -139,57 +128,39 @@ class Help(Cog, hidden=True):
 
         options = []
         commands: dict[str, dict] = {}
+
+        # Alle Cogs durchgehen
         for name, cog in self.bot.cogs.items():
-            if hasattr(cog, "hidden") and cog.hidden:
+            if getattr(cog, "hidden", False):
                 continue
 
             group, name = get_group(cog, name, locale)
-
-            if len(name) == 0:
-                log.warning(
-                    "A cog has a name with length 0. "
-                    "This cog will not be displayed in the help command."
-                )
+            if not name:
                 continue
-
-            if len(name) > 100:
-                name = name[:90] + "..."
 
             if name not in commands:
-                commands[name] = {}
-            if "cmds" not in commands[name]:
-                commands[name]["cmds"] = []
-
-            if len(cog.get_commands()) == 0 and PYCORD:
-                continue
+                commands[name] = {"cmds": []}
 
             emoji = get_emoji(cog)
             commands[name]["emoji"] = emoji
+            desc = get_cog_desc(cog, locale) or tr("default_description", name, use_locale=ctx)
 
-            desc = get_cog_desc(cog, locale)
             if not desc:
-                desc = tr("default_description", name, use_locale=ctx)
-                if not desc:
-                    log.warning(
-                        f"The default description for cog '{name}' is invalid. "
-                        f"This can be changed in the language file."
-                    )
+                desc = "Keine Beschreibung verfügbar."
 
-            if "description" not in commands[name]:
-                commands[name]["description"] = desc
-
+            commands[name]["description"] = desc
             field_name = replace_placeholders(self.bot.help.title, name=name, emoji=emoji)
-            desc = replace_placeholders(
+            field_value = replace_placeholders(
                 self.bot.help.description, description=desc, name=name, emoji=emoji
             )
 
+            # Befehle sammeln
+            cog_cmds = []
             if PYCORD:
                 cog_cmds = [
-                    cmd
-                    for cmd in cog.walk_commands()
+                    cmd for cmd in cog.walk_commands()
                     if isinstance(cmd, discord.ApplicationCommand)
-                    and type(cmd)
-                    not in [
+                    and type(cmd) not in [
                         discord.MessageCommand,
                         discord.UserCommand,
                         discord.SlashCommandGroup,
@@ -199,85 +170,66 @@ class Help(Cog, hidden=True):
                 cog_cmds = cog.walk_app_commands()
 
             for command in cog_cmds:
-                if PYCORD:
-                    default_perms = command.default_member_permissions
-                    guild_ids = command.guild_ids
-                else:
-                    default_perms = command.default_permissions
-                    guild_ids = command._guild_ids
-
                 if self.bot.help.permission_check:
                     if PYCORD and not await pass_checks(command, ctx):
                         continue
-
                     if isinstance(ctx.user, discord.Member):
-                        if default_perms and not command.parent:
-                            if not default_perms.is_subset(ctx.user.guild_permissions):
+                        perms = command.default_member_permissions if PYCORD else command.default_permissions
+                        if perms and not command.parent:
+                            if not perms.is_subset(ctx.user.guild_permissions):
                                 continue
-
                         parent_perms = get_perm_parent(command)
                         if parent_perms and not parent_perms.is_subset(ctx.user.guild_permissions):
                             continue
 
-                if ctx.guild and guild_ids and ctx.guild.id not in guild_ids:
-                    continue
+                if ctx.guild and getattr(command, "guild_ids", None):
+                    if ctx.guild.id not in command.guild_ids:
+                        continue
 
                 commands[name]["cmds"].append(command)
 
-            cmd_count = len(commands[name]["cmds"])
-
-            if cmd_count == 0:
+            if not commands[name]["cmds"]:
                 continue
-            if not group:
-                if self.bot.help.show_cmd_count:
-                    label = f"{name} ({cmd_count})"
-                else:
-                    label = name
-                option = discord.SelectOption(label=label, emoji=emoji, value=name)
-                options.append(option)
-                if self.bot.help.show_categories:
-                    embed.add_field(name=field_name, value=desc, inline=False)
 
-        if len(options) == 0:
+            label = f"{name} ({len(commands[name]['cmds'])})" if self.bot.help.show_cmd_count else name
+            options.append(discord.SelectOption(label=label, emoji=emoji, value=name))
+
+            if self.bot.help.show_categories:
+                embed.add_field(name=field_name, value=field_value, inline=False)
+
+        if not options:
             return await ctx.response.send_message(
                 tr("no_commands", use_locale=ctx), ephemeral=True
             )
-        if len(options) > 25 or len(embed.fields) > 25:
-            log.error(
-                f"Help command category limit reached. Only 25 out of {len(options)} are shown."
-            )
+
+        if len(options) > 25:
             options = options[:25]
+        if len(embed.fields) > 25:
             embed.fields = embed.fields[:25]
 
-        sorted_options = sorted(options, key=lambda x: [char for char in x.label if char.isalpha()])
+        sorted_options = sorted(options, key=lambda x: x.label.lower())
         embed.fields = sorted(embed.fields, key=lambda x: x.name.lower())
+
         view = CategoryView(sorted_options, self.bot, ctx.user, commands, ctx)
         for button in self.bot.help.buttons:
             view.add_item(deepcopy(button))
-        await ctx.response.send_message(view=view, embed=embed, ephemeral=self.bot.help.ephemeral)
+
+        await ctx.response.send_message(embed=embed, view=view, ephemeral=self.bot.help.ephemeral)
 
 
 class CategorySelect(discord.ui.Select):
-    def __init__(
-        self,
-        options: list[discord.SelectOption],
-        bot: Bot,
-        member: discord.Member | discord.User,
-        commands: dict[str, dict],
-        interaction,
-    ):
-        super().__init__(
-            min_values=1,
-            max_values=1,
-            placeholder=tr("placeholder", use_locale=interaction),
-            options=options,
-        )
+    """Dropdown für Kategorien im Help-Menü."""
+
+    def __init__(self, options, bot: Bot, member, commands, interaction):
+        super().__init__(min_values=1, max_values=1,
+                         placeholder=tr("placeholder", use_locale=interaction),
+                         options=options)
         self.bot = bot
         self.member = member
         self.commands = commands
 
     def get_mention(self, cmd, locale: str) -> str:
-        """This is only needed for Discord.py."""
+        """SlashCommand zu einer Erwähnung oder Formatierung machen."""
         if self.bot.all_dpy_commands:
             for c in self.bot.all_dpy_commands:
                 if c.name == cmd.name:
@@ -285,14 +237,14 @@ class CategorySelect(discord.ui.Select):
                     break
 
         if cmd.name_localizations is not discord.MISSING:
-            default = cmd.name_localizations.get(locale, f"**/{cmd.qualified_name}**")
+            default = cmd.name_localizations.get(locale, f"/{cmd.qualified_name}")
         else:
-            default = f"**/{cmd.qualified_name}**"
+            default = f"/{cmd.qualified_name}"
 
         try:
-            return cmd.mention or default
+            return cmd.mention or f"**{default}**"
         except AttributeError:
-            return default
+            return f"**{default}**"
 
     async def callback(self, interaction: discord.Interaction):
         if self.bot.help.author_only and interaction.user != self.member:
@@ -305,29 +257,23 @@ class CategorySelect(discord.ui.Select):
 
         embed = self.bot.help.embed
         if embed is None:
-            embed = discord.Embed(
-                color=discord.Color.blue(),
-            )
+            embed = discord.Embed(color=discord.Color.blue())
+            embed.set_footer(text="NovaCord Help Menu")
         else:
             embed = replace_embed_values(
                 embed, interaction, await fill_custom_variables(self.bot.help.kwargs)
             )
+
         embed.title = replace_placeholders(self.bot.help.title, name=title, emoji=emoji)
         embed.clear_fields()
 
         if self.bot.help.show_description:
-            embed.description = desc = cmds["description"] + "\n"
-        else:
-            desc = ""
+            embed.description = cmds["description"] + "\n"
 
         commands = cmds["cmds"]
-        embed_field_styles = [
-            HelpStyle.embed_fields,
-            HelpStyle.codeblocks_inline,
-            HelpStyle.codeblocks,
-        ]
         style = self.bot.help.style
-        if len(commands) > 25 and style in embed_field_styles:
+
+        if len(commands) > 25 and style in [HelpStyle.embed_fields, HelpStyle.codeblocks, HelpStyle.codeblocks_inline]:
             style = HelpStyle.embed_description
 
         if style == HelpStyle.embed_fields:
@@ -335,36 +281,29 @@ class CategorySelect(discord.ui.Select):
                 embed.add_field(
                     name=f"**{self.get_mention(command, locale)}**",
                     value=f"`{get_cmd_desc(command, locale)}`",
-                    inline=False,
+                    inline=False
                 )
-
         elif style == HelpStyle.codeblocks or style == HelpStyle.codeblocks_inline:
             for command in commands:
                 embed.add_field(
                     name=f"**{self.get_mention(command, locale)}**",
                     value=f"```{get_cmd_desc(command, locale)}```",
-                    inline=style == HelpStyle.codeblocks_inline,
+                    inline=(style == HelpStyle.codeblocks_inline)
                 )
-
         elif style == HelpStyle.embed_description:
-            embed.description = desc + "\n"
+            desc = embed.description or ""
             for command in commands:
-                if len(embed.description) <= 3500:
-                    embed.description += f"**{self.get_mention(command, locale)}**\n{get_cmd_desc(command, locale)}\n\n"
-                else:
-                    log.error("Help embed length limit reached. Some commands are not shown.")
-                    break
-
-        elif style == HelpStyle.markdown:
+                if len(desc) <= 3500:
+                    desc += f"**{self.get_mention(command, locale)}**\n{get_cmd_desc(command, locale)}\n\n"
             embed.description = desc
+        elif style == HelpStyle.markdown:
+            desc = embed.description or ""
             for command in commands:
-                if len(embed.description) <= 3500:
-                    embed.description += f"### {self.get_mention(command, locale)}\n{get_cmd_desc(command, locale)}\n"
-                else:
-                    log.error("Help embed length limit reached. Some commands are not shown.")
-                    break
+                if len(desc) <= 3500:
+                    desc += f"### {self.get_mention(command, locale)}\n{get_cmd_desc(command, locale)}\n"
+            embed.description = desc
 
-        if len(commands) == 0:
+        if not commands:
             embed.description = tr("no_commands", use_locale=interaction)
 
         view = CategoryView(self.options, self.bot, self.member, self.commands, interaction)
@@ -374,14 +313,9 @@ class CategorySelect(discord.ui.Select):
 
 
 class CategoryView(View):
-    def __init__(
-        self,
-        options: list[discord.SelectOption],
-        bot: Bot,
-        member: discord.Member | discord.User,
-        commands: dict[str, dict],
-        interaction: discord.Interaction,
-    ):
+    """Haupt-View für das Help-Menü."""
+
+    def __init__(self, options, bot: Bot, member, commands, interaction):
         if PYCORD:
             super().__init__(timeout=bot.help.timeout, disable_on_timeout=True)
         else:
