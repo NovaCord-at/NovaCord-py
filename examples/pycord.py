@@ -1,8 +1,8 @@
 import discord
 
-import ezcord
+import novacordpy
 
-bot = ezcord.Bot(
+bot = novacordpy.Bot(
     intents=discord.Intents.default(),
     error_webhook_url="WEBHOOK_URL",  # Replace with your webhook URL
     language="de",

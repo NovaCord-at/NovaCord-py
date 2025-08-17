@@ -1,15 +1,15 @@
 import discord
 from discord.commands import slash_command
 
-import ezcord
+import novacordpy
 
 
-class ExampleCog(ezcord.Cog):
+class ExampleCog(novacordpy.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @slash_command()
-    async def example_cmd(self, ctx: ezcord.EzContext):
+    async def example_cmd(self, ctx: novacordpy.EzContext):
         # Keys from the language file will be auto-translated.
         await ctx.respond("example.command1.welcome", user=ctx.user.mention)
 
@@ -21,7 +21,7 @@ class ExampleCog(ezcord.Cog):
         await ctx.respond(text)
 
         # If ctx is not available, you can use other types to determine the language.
-        text = ezcord.t(ctx.interaction, "example.command1.welcome", user=ctx.user.mention)
+        text = novacordpy.t(ctx.interaction, "example.command1.welcome", user=ctx.user.mention)
         await ctx.respond(text)
 
         # The count variable is used for pluralization.

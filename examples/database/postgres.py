@@ -1,12 +1,12 @@
 import discord
 
-import ezcord
+import novacordpy
 
 # Connection attributes can be passed to the init method, but it's recommended to
 # set them in a .env file.
 
 
-class UserDB(ezcord.PGHandler):
+class UserDB(novacordpy.PGHandler):
     async def setup(self):
         """Execute a single query."""
         await self.exec(
@@ -38,7 +38,7 @@ class UserDB(ezcord.PGHandler):
 db = UserDB()
 
 
-class Bot(ezcord.Bot):
+class Bot(novacordpy.Bot):
     def __init__(self):
         super().__init__(intents=discord.Intents.default())
 

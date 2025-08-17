@@ -2,10 +2,10 @@ import asyncio
 
 import discord
 
-import ezcord
+import novacordpy
 
 
-class Bot(ezcord.Bot):
+class Bot(novacordpy.Bot):
     def __init__(self):
         super().__init__(intents=discord.Intents.default())
 

@@ -1,9 +1,8 @@
-[![EzCord](https://ezcord.readthedocs.io/en/latest/_static/ezcord.png)](https://github.com/tibue99/ezcord)
 
-[![](https://img.shields.io/discord/1010915072694046794?label=discord&style=for-the-badge&logo=discord&color=5865F2&logoColor=white)](https://discord.gg/zfvbjTEzv6)
-[![](https://img.shields.io/pypi/v/ezcord.svg?style=for-the-badge&logo=pypi&color=yellow&logoColor=white)](https://pypi.org/project/ezcord/)
-[![](https://img.shields.io/pypi/l/ezcord?style=for-the-badge)](https://github.com/tibue99/ezcord/blob/main/LICENSE)
-[![](https://aschey.tech/tokei/github/tibue99/ezcord?style=for-the-badge)](https://github.com/tibue99/ezcord)
+[![](https://img.shields.io/discord/1010915072694046794?label=discord&style=for-the-badge&logo=discord&color=5865F2&logoColor=white)](https://discord.gg/7GnUwbStKA)
+[![](https://img.shields.io/pypi/v/ezcord.svg?style=for-the-badge&logo=pypi&color=yellow&logoColor=white)](https://pypi.org/project/novacordpy/)
+[![](https://img.shields.io/pypi/l/ezcord?style=for-the-badge)](https://github.com/NovaCord-at/NovaCord-py/blob/main/LICENSE)
+[![](https://aschey.tech/tokei/github/tibue99/ezcord?style=for-the-badge)](https://github.com/NovaCord-at/NovaCord-py)
 
 An easy-to-use extension for [Discord.py](https://github.com/Rapptz/discord.py)
 and [Pycord](https://github.com/Pycord-Development/pycord) with some utility functions.
@@ -56,11 +55,12 @@ or the [sample code](https://ezcord.readthedocs.io/en/latest/examples/examples.h
 EzCord can automatically load the token if a `TOKEN` variable is present in the `.env` file.
 
 ### Pycord
+
 ```py
-import ezcord
+import novacordpy
 import discord
 
-bot = ezcord.Bot(
+bot = novacordpy.Bot(
     intents=discord.Intents.default()
 )
 
@@ -70,13 +70,14 @@ if __name__ == "__main__":
 ```
 
 ### Discord.py
+
 ```py
 import asyncio
 import discord
-import ezcord
+import novacordpy
 
 
-class Bot(ezcord.Bot):
+class Bot(novacordpy.Bot):
     def __init__(self):
         super().__init__(intents=discord.Intents.default())
 

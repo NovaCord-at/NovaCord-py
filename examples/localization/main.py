@@ -1,12 +1,12 @@
 import yaml
 
-import ezcord
+import novacordpy
 
 with open("en.yaml", encoding="utf-8") as file:
     en = yaml.safe_load(file)
 
 string_locals = {"en": en}
-ezcord.i18n.I18N(string_locals)
+novacordpy.i18n.I18N(string_locals)
 
 
 with open("commands.yaml", encoding="utf-8") as file:
@@ -14,7 +14,7 @@ with open("commands.yaml", encoding="utf-8") as file:
 
 
 if __name__ == "__main__":
-    bot = ezcord.Bot()
+    bot = novacordpy.Bot()
     bot.load_cogs()
     bot.localize_commands(cmd_locales)  # Must be called after all commands and cogs are loaded
     bot.run()

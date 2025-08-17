@@ -3,11 +3,11 @@ import tempfile
 
 import pytest
 
-import ezcord
-from ezcord.internal.dc import discord
+import novacordpy
+from novacordpy.internal.dc import discord
 
 
-class UserDB(ezcord.DBHandler):
+class UserDB(novacordpy.DBHandler):
     def __init__(self, path):
         super().__init__(path)
 
@@ -40,7 +40,7 @@ def test_libs():
 
     intents = discord.Intents.default()
     intents.message_content = True
-    bot = ezcord.Bot(command_prefix="!", intents=intents)
+    bot = novacordpy.Bot(command_prefix="!", intents=intents)
 
     assert bot
     with pytest.raises(TypeError):
@@ -74,8 +74,8 @@ def test_i18n():
     invalid_type = InvalidType()
 
     if discord.__name__ == "pycord":  # Only Pycord is supported by i18n
-        assert ezcord.I18N.get_locale("en") == "en"
-        assert ezcord.I18N.get_locale("en-US") == "en-US"
-        assert ezcord.I18N.get_locale(invalid_type) is None
+        assert novacordpy.I18N.get_locale("en") == "en"
+        assert novacordpy.I18N.get_locale("en-US") == "en-US"
+        assert novacordpy.I18N.get_locale(invalid_type) is None
 
-        assert ezcord.I18N.get_clean_locale("en-US") == "en"
+        assert novacordpy.I18N.get_clean_locale("en-US") == "en"

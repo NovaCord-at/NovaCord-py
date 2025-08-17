@@ -3,7 +3,7 @@
 .. hint::
 
         Components in your code are automatically replaced with the ones from this module.
-        You can use `discord.ui.View` instead of `ezcord.View`.
+        You can use `discord.ui.View` instead of `novacordpy.View`.
 """
 
 from __future__ import annotations
@@ -49,19 +49,19 @@ def event(coro):
     -------
     .. code-block:: python
 
-        @ezcord.event
+        @novacordpy.event
         async def view_check(interaction):
             return interaction.user.id == 12345  # Returns True or False
 
-        @ezcord.event
+        @novacordpy.event
         async def on_view_check_failure(interaction):
             await interaction.response.send_message("You can't use this!")
 
-        @ezcord.event
+        @novacordpy.event
         async def on_view_error(error, item, interaction):
             await interaction.response.send_message("Something went wrong!")
 
-        @ezcord.event
+        @novacordpy.event
         async def on_modal_error(error, interaction):
             await interaction.response.send_message("Something went wrong!")
     """
@@ -138,7 +138,7 @@ class View(discord.ui.View):
     ) -> None:
         """Sends an error message to a webhook, if the URL was passed in :class:`.Bot`.
 
-        Executes all registered error handlers with the ``@ezcord.event`` decorator.
+        Executes all registered error handlers with the ``@novacordpy.event`` decorator.
         """
         if not PYCORD:
             error, item, interaction = item, interaction, error
@@ -208,7 +208,7 @@ class Modal(discord.ui.Modal):
     async def on_error(self, error: Exception, interaction: discord.Interaction) -> None:
         """Sends an error message to a webhook, if the webhook URL was passed into :class:`.Bot`.
 
-        Executes all registered error handlers with the ``@ezcord.event`` decorator.
+        Executes all registered error handlers with the ``@novacordpy.event`` decorator.
         """
         if not PYCORD:
             error, interaction = interaction, error
@@ -234,7 +234,7 @@ class EzView(View):
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
-        warn_deprecated("ezcord.EzView", "discord.ui.View", "2.6")
+        warn_deprecated("novacordpy.EzView", "discord.ui.View", "2.6")
 
 
 class EzModal(Modal):
@@ -242,7 +242,7 @@ class EzModal(Modal):
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
-        warn_deprecated("ezcord.EzModal", "discord.ui.Modal", "2.6")
+        warn_deprecated("novacordpy.EzModal", "discord.ui.Modal", "2.6")
 
 
 # replace all default components with Ezcord components

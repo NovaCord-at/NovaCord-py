@@ -1,6 +1,6 @@
-import ezcord
+import novacordpy
 
-bot = ezcord.Bot(
+bot = novacordpy.Bot(
     ready_event=None,  # Disable default ready event
 )
 
@@ -18,7 +18,7 @@ async def on_ready():
 
     bot.ready(
         title="Bot is online!",
-        style=ezcord.ReadyEvent.default,
+        style=novacordpy.ReadyEvent.default,
     )
 
 

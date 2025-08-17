@@ -40,7 +40,7 @@ class DBHandler:
 
     .. code-block:: python3
 
-            async with DBHandler("ezcord.db") as db:
+            async with DBHandler("novacordpy.db") as db:
                 await db.exec("CREATE TABLE IF NOT EXISTS vip (id INTEGER PRIMARY KEY, name TEXT)")
                 await db.exec("INSERT INTO vip (name) VALUES (?)", "Timo")
     """
@@ -121,7 +121,7 @@ class DBHandler:
 
             class VipDB(DBHandler):
                 def __init__(self):
-                    super().__init__("ezcord.db")
+                    super().__init__("novacordpy.db")
 
                 async def setup(self):
                     async with self.start() as db:

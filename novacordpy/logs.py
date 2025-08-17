@@ -21,7 +21,7 @@ from .internal.colors import (
 )
 from .internal.dc import discord
 
-DEFAULT_LOG = "ezcord"
+DEFAULT_LOG = "novacordpy"
 log = logging.getLogger(DEFAULT_LOG)
 
 
@@ -302,14 +302,14 @@ def set_log(
     .. code-block:: python
 
         import logging
-        import ezcord
+        import novacordpy
 
         colors = {
             logging.DEBUG: "blue",
             logging.INFO: "red",
         }
 
-        ezcord.set_log(colors=colors)
+        novacordpy.set_log(colors=colors)
     """
     logger = logging.getLogger(name)
     if logger.handlers:

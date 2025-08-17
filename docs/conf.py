@@ -61,5 +61,5 @@ html_theme = "furo"
 html_static_path = ["_static"]
 
 html_title = f"<h3 align='center'>{release}</h3>"
-html_logo = "_static/ezcord.png"
+html_logo = "_static/novacordpy.png"
 html_favicon = "_static/favicon.ico"

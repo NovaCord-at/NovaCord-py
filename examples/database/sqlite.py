@@ -1,9 +1,9 @@
 import discord
 
-import ezcord
+import novacordpy
 
 
-class UserDB(ezcord.DBHandler):
+class UserDB(novacordpy.DBHandler):
     def __init__(self):
         super().__init__("user.db")
 
@@ -36,7 +36,7 @@ class UserDB(ezcord.DBHandler):
 db = UserDB()
 
 
-class Bot(ezcord.Bot):
+class Bot(novacordpy.Bot):
     def __init__(self):
         super().__init__(intents=discord.Intents.default())
 

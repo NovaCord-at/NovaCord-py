@@ -355,7 +355,7 @@ class I18N:
     disable_translations:
         A list of translations to disable. Defaults to ``None``.
 
-        The log level in :meth:`ezcord.logs.set_log` must be set to ``DEBUG`` for this to work.
+        The log level in :meth:`novacordpy.logs.set_log` must be set to ``DEBUG`` for this to work.
     debug:
         Whether to send debug messages and warnings. Defaults to ``True``.
     language_settings:

@@ -1,11 +1,11 @@
 import discord
 
-import ezcord
+import novacordpy
 
-bot = ezcord.Bot()
+bot = novacordpy.Bot()
 
 
-class Dropdown(ezcord.DropdownPaginator):
+class Dropdown(novacordpy.DropdownPaginator):
     def __init__(self, options: list[discord.SelectOption]):
         super().__init__(options=options)
 

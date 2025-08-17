@@ -298,7 +298,7 @@ class Bot(_main_bot):  # type: ignore
         """Loads an extension with configurable error handling.
 
         This method attempts to load a bot extension. The behavior on error depends
-        on the `safe_loading` setting in the ``ezcord.Bot`` instance.
+        on the `safe_loading` setting in the ``novacordpy.Bot`` instance.
 
         Parameters
         ----------
@@ -650,7 +650,7 @@ class Bot(_main_bot):  # type: ignore
         embed:
             The embed to use for the help command. If this is ``None``, a default
             embed will be used.
-            All template variables that are listed in :meth:`ezcord.emb.set_embed_templates`
+            All template variables that are listed in :meth:`novacordpy.emb.set_embed_templates`
             can be used here.
         show_categories:
             Whether to display the categories of the help command front page. Defaults to ``True``.
@@ -712,7 +712,7 @@ class Bot(_main_bot):  # type: ignore
         )
         self.enabled_extensions.append("help")
         if not DPY:
-            self.load_extension("ezcord.cogs.pyc.help_setup", package="ezcord")
+            self.load_extension("novacordpy.cogs.pyc.help_setup", package="novacordpy")
 
     def add_status_changer(
         self,
@@ -792,7 +792,7 @@ class Bot(_main_bot):  # type: ignore
         )
         self.enabled_extensions.append("status_changer")
         if not DPY:
-            self.load_extension("ezcord.cogs.pyc.status_changer_setup", package="ezcord")
+            self.load_extension("novacordpy.cogs.pyc.status_changer_setup", package="novacordpy")
 
     def add_blacklist(
         self,
@@ -858,7 +858,7 @@ class Bot(_main_bot):  # type: ignore
 
         self.enabled_extensions.append("blacklist")
         if not DPY:
-            self.load_extension("ezcord.cogs.pyc.blacklist_setup", package="ezcord")
+            self.load_extension("novacordpy.cogs.pyc.blacklist_setup", package="novacordpy")
 
     def localize_commands(
         self, languages: dict[str, dict], default: str = "en-US", cogs: bool = True
@@ -913,7 +913,7 @@ class Bot(_main_bot):  # type: ignore
             await self.load_extension(cog)
 
         for ext in self.enabled_extensions:
-            await self.load_extension(f".cogs.dpy.{ext}_setup", package="ezcord")
+            await self.load_extension(f".cogs.dpy.{ext}_setup", package="novacordpy")
 
     def _run_setup(
         self,
