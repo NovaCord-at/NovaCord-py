@@ -12,7 +12,7 @@ from datetime import date
 
 sys.path.insert(0, os.path.abspath("../"))
 
-from ezcord import __version__
+from novacordpy import __version__
 
 project = "novacordpy"
 copyright = f"{date.today().year}, atpascal07"
