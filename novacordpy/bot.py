@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING, Any, Callable
 
 import aiohttp
 from dotenv import load_dotenv
-from colorama import Fore
 
 from .emb import EzContext
 from .emb import error as error_emb
@@ -259,23 +258,22 @@ class Bot(_main_bot):  # type: ignore
         self,
         *directories: str,
         subdirectories: bool = False,
-        ignored_cogs: list[str] | None = None,
+        ignored_cogs: list[str] | None,
         log: CogLog | str | None = CogLog.default,
-        custom_log_level: str | None = None,
-        log_color: str | None = None,
+        custom_log_level: str | None,
+        log_color: str | None,
     ):
-        import os
-        from pathlib import Path
-        from colorama import Fore
+        cogs = []
 
         ignored_cogs = ignored_cogs or []
         if not directories:
             directories = ("cogs",)
 
-        loaded_cogs = []
+        loaded_cogs = 0
         for directory in directories:
             for root, dirs, files in os.walk(directory):
                 path = Path(root)
+                loaded_dir_cogs = 0
                 for filename in files:
                     name = filename[:-3]
                     if (
@@ -283,18 +281,18 @@ class Bot(_main_bot):  # type: ignore
                         and not filename.startswith("_")
                         and name not in ignored_cogs
                     ):
-                        cog_name = f"{'.'.join(path.parts)}.{name}"
-                        try:
-                            self.load_extension(cog_name)
-                            print(f"{Fore.BLUE}GELADEN: {Fore.RESET}{cog_name}")
-                        except Exception as e:
-                            print(f"{Fore.RED}NICHT GELADEN: {Fore.RESET}{cog_name} - {e}")
-                        loaded_cogs.append(cog_name)
+                        cogs.append(f"{'.'.join(path.parts)}.{name}")
+                        loaded_dir_cogs += 1
+                        self._cog_log(
+                            f"{name}", custom_log_level, log, ".".join(path.parts[1:]), log_color
+                        )
+                loaded_cogs += loaded_dir_cogs
+
+                self._cog_count_log(custom_log_level, log, loaded_dir_cogs, log_color, path.stem)
                 if not subdirectories:
                     break
-
-        print(f"{Fore.GREEN}FERTIG: {Fore.RESET}{len(loaded_cogs)} Cogs geladen")
-        return loaded_cogs
+        self._cog_count_log(custom_log_level, log, loaded_cogs, log_color)
+        return cogs
 
     def load_extension(self, name: str, **kwargs):
         """Loads an extension with configurable error handling.
@@ -314,7 +312,7 @@ class Bot(_main_bot):  # type: ignore
         except Exception as e:
             if not self.safe_loading:
                 raise
-            self.logger.error(f"Failed to load extension '{name}'", exc_info=e)
+            self.logger.error(f"Failed to load extension '{name}'", exc_info=e.__cause__)
 
     def load_cogs(
         self,
