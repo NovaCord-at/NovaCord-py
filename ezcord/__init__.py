@@ -1,7 +1,7 @@
-__title__ = "ezcord"
-__author__ = "tibue99"
+__title__ = "NovaCordpy"
+__author__ = "NovaCord-at"
 __license__ = "MIT"
-__version__ = "0.7.2"
+__version__ = "0.1.0"
 
 from . import blacklist, components, emb, i18n, logs, sql, times, utils
 from .bot import *
