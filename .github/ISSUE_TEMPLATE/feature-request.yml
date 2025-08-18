@@ -1,12 +1,12 @@
 name: Feature Request
-description: Request a feature that you would like to see in EzCord
+description: Request a feature that you would like to see in NovaCord-Py
 labels: [enhancement]
 
 body:
 - type: markdown
   attributes:
     value: |
-      - Check if the feature was already requested [here](https://github.com/tibue99/ezcord/issues).
+      - Check if the feature was already requested [here](https://github.com/NovaCord-at/NovaCord-py/issues).
       - Include only one feature per issue.
 
 - type: textarea
