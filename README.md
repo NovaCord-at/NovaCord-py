@@ -65,7 +65,7 @@ bot = novacordpy.Bot(
 )
 
 if __name__ == "__main__":
-    bot.load_cogs("cogs")  # Load all cogs in the "cogs" folder
+    bot.load_cogs()  # Load all cogs in the "cogs" folder
     bot.run("TOKEN")
 ```
 
@@ -89,7 +89,7 @@ class Bot(novacordpy.Bot):
 async def main():
     async with Bot() as bot:
         bot.add_help_command()
-        bot.load_cogs("cogs")  # Load all cogs in the "cogs" folder
+        bot.load_cogs()  # Load all cogs in the "cogs" folder
         await bot.start("TOKEN")
 
 
