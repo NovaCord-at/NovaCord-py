@@ -37,7 +37,7 @@ class Bold(Style):
 
 
 READY_TITLE: str = f"Bot is online with NovaCordPy {__version__}"
-DEFAULT_COLORS: list[str] = [Fore.CYAN, Fore.MAGENTA, Fore.YELLOW, Fore.GREEN, Fore.BLUE, Fore.RED]
+DEFAULT_COLORS: list[str] = [Fore.CYAN, Fore.MAGENTA, Fore.YELLOW, Fore.GREEN, Fore.BLUE, Fore.RED, Fore.WHITE]
 
 
 def get_default_info(bot: Bot) -> list[tuple[str, str]]:
@@ -47,11 +47,21 @@ def get_default_info(bot: Bot) -> list[tuple[str, str]]:
     except OverflowError:
         ping = "∞"
 
+    # Versuche zuerst bot.cogs, sonst bot.extensions
+    try:
+        cogs_count = len(bot.cogs)
+    except AttributeError:
+        try:
+            cogs_count = len(bot.extensions)
+        except AttributeError:
+            cogs_count = "?"
+
     return [
         ("Bot", f"{bot.user}"),
         ("ID", f"{bot.user.id}"),
         (lib_name, discord.__version__),
         ("Commands", f"{bot.cmd_count:,}"),
+        ("Cogs", f"{cogs_count:,}"),
         ("Guilds", f"{len(bot.guilds):,}"),
         ("Latency", ping),
     ]
@@ -64,7 +74,7 @@ def modify_info(
 
     infos = get_default_info(bot)
     additions, deletions = modifications
-    colors = custom_color_list or DEFAULT_COLORS
+    colors = custom_color_list or DEFAULT_COLORS.copy()
 
     for key, settings in additions.items():
         value, position, color = settings["value"], settings["position"], settings["color"]
