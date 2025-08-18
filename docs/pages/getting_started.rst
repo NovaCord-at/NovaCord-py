@@ -1,18 +1,18 @@
 Getting Started
 =======================
-This page shows how to quickly get started with **EzCord**.
+This page shows how to quickly get started with **NovaVord-Py**.
 
 Installing
 -----------
 Python 3.9 or higher is required.
 ::
 
-    pip install ezcord
+    pip install novacordpy
 
 You can also install the latest version from GitHub. Note that this version may be unstable.
 ::
 
-    pip install git+https://github.com/tibue99/ezcord
+    pip install git+https://github.com/NovaCord-at/NovaCord-py
 
 
 First Steps
@@ -20,15 +20,15 @@ First Steps
 You should already have a basic understanding of **Discord.py** or **Pycord**.
 
 1. Create a new bot in the `Discord Developer Portal <https://discord.com/developers/applications/>`_
-2. Create a bot object using :doc:`ezcord.Bot </ezcord/bot>`
+2. Create a bot object using :doc:`novacordpy.Bot </novacordpy/bot>`
 
 .. hint::
-    If you are using Pycord with Prefix commands, use ``ezcord.PrefixBot`` instead.
+    If you are using Pycord with Prefix commands, use ``novacordpy.PrefixBot`` instead.
 
 
 Example
 --------------
-A quick example of how EzCord works. You can find more examples :doc:`here </examples/examples>`.
+A quick example of how NovaCord-Py works. You can find more examples :doc:`here </examples/examples>`.
 
 .. literalinclude:: ../../examples/pycord.py
    :language: python
