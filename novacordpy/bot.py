@@ -314,50 +314,21 @@ class Bot(_main_bot):  # type: ignore
                 raise
             self.logger.error(f"Failed to load extension '{name}'", exc_info=e.__cause__)
 
-    def load_cogs(
-        self,
-        *directories: str,
-        subdirectories: bool = False,
-        ignored_cogs: list[str] | None = None,
-        log: CogLog | str | None = CogLog.default,
-        custom_log_level: str | None = "COG",
-        log_color: str | None = None,
-    ):
-        """Load all cogs in the given directories.
-
-        Parameters
-        ----------
-        *directories:
-            Names of the directories to load cogs from.
-            Defaults to ``"cogs"``.
-        subdirectories:
-            Whether to load cogs from subdirectories.
-            Defaults to ``False``.
-        ignored_cogs:
-            A list of cogs to ignore. Defaults to ``None``.
-        log:
-            The log format for cogs. Defaults to :attr:`.CogLog.default`.
-            If this is ``None``, logs will be disabled.
-        custom_log_level:
-            The name of the custom log level for cogs. Defaults to ``COG``.
-        log_color:
-            The color to use for cog logs. This will only have an effect if ``custom_log_level`` is enabled.
-            If this is ``None``, a default color will be used.
+    def load_cogs(self):
         """
+        Lädt alle Cogs aus dem ./cogs Verzeichnis.
+        """
+        from colorama import Fore, Style
 
-        cogs = self._manage_cogs(
-            *directories,
-            subdirectories=subdirectories,
-            ignored_cogs=ignored_cogs,
-            log=log,
-            custom_log_level=custom_log_level,
-            log_color=log_color,
-        )
-        self.initial_cogs = cogs
-
-        if not DPY:
-            for cog in cogs:
-                self.load_extension(cog)
+        cogs_directory = './cogs'
+        for filename in os.listdir(cogs_directory):
+            if filename.endswith('.py') and not filename.startswith('_'):
+                cog_name = f'cogs.{filename[:-3]}'
+                try:
+                    self.load_extension(cog_name)
+                    print(f'{Fore.BLUE}GELADEN: {Style.RESET_ALL}{cog_name}')
+                except Exception as e:
+                    print(f'{Fore.RED}NICHT GELADEN: {Style.RESET_ALL}{cog_name} - {e}')
 
     def add_ready_info(
         self,
