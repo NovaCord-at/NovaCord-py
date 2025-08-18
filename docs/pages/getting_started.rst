@@ -1,6 +1,6 @@
 Getting Started
 =======================
-This page shows how to quickly get started with **NovaVord-Py**.
+This page shows how to quickly get started with **NovaCord-Py**.
 
 Installing
 -----------
