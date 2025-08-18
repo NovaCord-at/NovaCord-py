@@ -46,11 +46,10 @@ novacordpy @ git+https://github.com/NovaCord-at/NovaCord-py
 
 ## Useful Links
 - [Pycord](https://docs.pycord.dev/) | [Discord.py](https://discordpy.readthedocs.io/en/stable/)
-- [PyPi](https://pypi.org/project/ezcord/)
+- [PyPi](https://pypi.org/project/novacordpy/)
 
 ## Examples
-- For more examples, see the [example repository](https://github.com/tibue99/ezcord_template)
-or the [sample code](https://ezcord.readthedocs.io/en/latest/examples/examples.html).
+ [sample code](https://novacord-py.readthedocs.io/en/latest/examples/examples.html).
 - **Note:** It's recommended to [load the token](https://guide.pycord.dev/getting-started/creating-your-first-bot#protecting-tokens) from a `.env` file instead of hardcoding it.
 EzCord can automatically load the token if a `TOKEN` variable is present in the `.env` file.
 
@@ -98,4 +97,4 @@ if __name__ == "__main__":
 ```
 
 ## Contributing
-You are welcome to contribute to this repository! Please refer to the full [contribution guide](https://ezcord.readthedocs.io/en/latest/pages/contributing.html).
+You are welcome to contribute to this repository! Please refer to the full [contribution guide](https://novacord-py.readthedocs.io/en/latest/pages/contributing.html).
