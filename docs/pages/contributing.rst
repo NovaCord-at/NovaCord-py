@@ -48,4 +48,4 @@ Now you can open ``_build/html/index.html`` in your browser.
 
 Other Resources
 ---------------
-Feel free to create an `issue or feature request <https://github.com/tibue99/ezcord/issues>`_ on GitHub.
+Feel free to create an `issue or feature request <https://github.com/NovaCord-at/NovaCord-py/issues>`_ on GitHub.
