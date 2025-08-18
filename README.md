@@ -1,8 +1,8 @@
 
-[![](https://img.shields.io/discord/1010915072694046794?label=discord&style=for-the-badge&logo=discord&color=5865F2&logoColor=white)](https://discord.gg/7GnUwbStKA)
-[![](https://img.shields.io/pypi/v/ezcord.svg?style=for-the-badge&logo=pypi&color=yellow&logoColor=white)](https://pypi.org/project/novacordpy/)
-[![](https://img.shields.io/pypi/l/ezcord?style=for-the-badge)](https://github.com/NovaCord-at/NovaCord-py/blob/main/LICENSE)
-[![](https://aschey.tech/tokei/github/tibue99/ezcord?style=for-the-badge)](https://github.com/NovaCord-at/NovaCord-py)
+[![](https://img.shields.io/discord/1088405118392750121?label=discord&style=for-the-badge&logo=discord&color=5865F2&logoColor=white)](https://discord.gg/7GnUwbStKA)
+[![](https://img.shields.io/pypi/v/novacordpy.svg?style=for-the-badge&logo=pypi&color=yellow&logoColor=white)](https://pypi.org/project/novacordpy/)
+[![](https://img.shields.io/pypi/l/NovaCord-py?style=for-the-badge)](https://github.com/NovaCord-at/NovaCord-py/blob/main/LICENSE)
+[![](https://aschey.tech/tokei/github/NovaCord-at/NovaCord-py?style=for-the-badge)](https://github.com/NovaCord-at/NovaCord-py)
 
 An easy-to-use extension for [Discord.py](https://github.com/Rapptz/discord.py)
 and [Pycord](https://github.com/Pycord-Development/pycord) with some utility functions.
