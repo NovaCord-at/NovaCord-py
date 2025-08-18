@@ -15,7 +15,7 @@ I am always happy to receive contributions. Here is how to do it:
 
 .. note::
 
-   As EzCord supports multiple Discord Libraries, you can't import any of them directly.
+   As NovaCord-Py supports multiple Discord Libraries, you can't import any of them directly.
    Instead, you should import them from the ``internal/dc`` module.
 
    .. code:: python
@@ -30,9 +30,9 @@ Import any features that you would like to test.
 
 .. code:: python
 
-    import ezcord
+    import novacordpy
 
-    bot = ezcord.Bot()
+    bot = novacordpy.Bot()
     bot.run()
 
 
