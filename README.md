@@ -1,4 +1,4 @@
-## NovaCord-py
+# NovaCord-py
 
 [![](https://img.shields.io/discord/1088405118392750121?label=discord&style=for-the-badge&logo=discord&color=5865F2&logoColor=white)](https://discord.gg/7GnUwbStKA)
 [![](https://img.shields.io/pypi/v/novacordpy.svg?style=for-the-badge&logo=pypi&color=yellow&logoColor=white)](https://pypi.org/project/novacordpy/)
