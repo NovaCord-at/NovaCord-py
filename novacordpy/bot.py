@@ -316,19 +316,37 @@ class Bot(_main_bot):  # type: ignore
 
     def load_cogs(self):
         """
-        Lädt alle Cogs aus dem ./cogs Verzeichnis.
+        Lädt alle Cogs aus dem ./cogs Verzeichnis und allen Unterordnern.
+        Gibt dabei auch die gefundenen Unterordner aus und listet deren Cogs.
+        Am Ende wird eine Zusammenfassung angezeigt.
         """
         from colorama import Fore, Style
 
-        cogs_directory = './cogs'
-        for filename in os.listdir(cogs_directory):
-            if filename.endswith('.py') and not filename.startswith('_'):
-                cog_name = f'cogs.{filename[:-3]}'
-                try:
-                    self.load_extension(cog_name)
-                    print(f'{Fore.BLUE}GELADEN: {Style.RESET_ALL}{cog_name}')
-                except Exception as e:
-                    print(f'{Fore.RED}NICHT GELADEN: {Style.RESET_ALL}{cog_name} - {e}')
+        cogs_directory = Path("./cogs")
+        loaded_count = 0
+        failed_count = 0
+
+        for root, _, files in os.walk(cogs_directory):
+            rel_path = Path(root).relative_to(cogs_directory.parent)
+            folder_name = ".".join(rel_path.parts)
+
+            # Ordner ausgeben
+            print(f"{Fore.CYAN}Ordner: {Style.RESET_ALL}{folder_name}")
+
+            for filename in files:
+                if filename.endswith(".py") and not filename.startswith("_"):
+                    cog_name = ".".join(rel_path.parts + (filename[:-3],))
+                    try:
+                        self.load_extension(cog_name)
+                        print(f"  {Fore.BLUE}GELADEN: {Style.RESET_ALL}{cog_name}")
+                        loaded_count += 1
+                    except Exception as e:
+                        print(f"  {Fore.RED}NICHT GELADEN: {Style.RESET_ALL}{cog_name} - {e}")
+                        failed_count += 1
+
+        # Zusammenfassung
+        print(f"\n{Fore.GREEN}✅ Geladen: {loaded_count}{Style.RESET_ALL} | "
+              f"{Fore.RED}❌ Fehlgeschlagen: {failed_count}{Style.RESET_ALL}")
 
     def add_ready_info(
         self,
